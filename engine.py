@@ -20,55 +20,43 @@ RULES:
 
 
 def phase1_encrypt(text, key):
-    """
-    Phase 1: Substitution — Shift every character by a fixed amount.
-
-    This layer changes WHAT each character is (its identity).
-
-    Args:
-        text: The plaintext string to encrypt
-        key: Dictionary containing encryption settings
-
-    Returns:
-        The encrypted string with all characters shifted
-    """
-    # Get the shift amount from the key (default to 5 if not specified)
+    """Phase 1: Substitution — Shift characters."""
     shift = key.get("shift", 5)
-
     result = ""
     for char in text:
-        if 32 <= ord(char) <= 126:  # Printable ASCII range
+        if 32 <= ord(char) <= 126:
             position = ord(char) - 32
             new_position = (position + shift) % 95
             result += chr(new_position + 32)
         else:
             result += char
-
     return result
 
 
 def phase1_decrypt(text, key):
-    """
-    Phase 1: Reverse the substitution.
-
-    Decryption shifts in the OPPOSITE direction (subtracts instead of adds).
-
-    Args:
-        text: The encrypted string
-        key: Dictionary containing the same encryption settings
-
-    Returns:
-        The decrypted (original) string
-    """
+    """Phase 1: Reverse substitution."""
     shift = key.get("shift", 5)
-
     result = ""
     for char in text:
         if 32 <= ord(char) <= 126:
             position = ord(char) - 32
-            new_position = (position - shift) % 95  # SUBTRACT to reverse!
+            new_position = (position - shift) % 95
             result += chr(new_position + 32)
         else:
             result += char
+    return result
 
+
+def encrypt(text, key):
+    """Master encrypt — all 5 phases."""
+    result = phase1_encrypt(text, key)
+    # TODO: Phases 2-5
+    return result
+
+
+def decrypt(text, key):
+    """Master decrypt — reverse all phases."""
+    result = text
+    # TODO: Phases 5-2
+    result = phase1_decrypt(result, key)
     return result
