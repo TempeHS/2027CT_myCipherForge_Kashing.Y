@@ -246,24 +246,18 @@ def phase4_decrypt(text, key):
 ###############################################
 # PHASE 5: WILD CARD - XOR Cipher
 ###############################################
-
-
 def phase5_encrypt(text, key):
-    """Encrypts text by XORing each character's ASCII code with the key."""
+    """Encrypt text by XORing each character code with a fixed value (42)."""
     result = ""
     for char in text:
-        try:
-            shift = int(key)
-        except (ValueError, TypeError):
-            shift = 78
-
-        flipped = ord(char) ^ shift
+        # XOR with 42
+        flipped = ord(char) ^ 42
         result += chr(flipped)
     return result
 
 
 def phase5_decrypt(text, key):
-    """Decrypts text. Because XOR is symmetrical, running it through the same function reverses the process!"""
+    """Decrypt text by XORing again with the same value — self-inverse!"""
     return phase5_encrypt(text, key)
 
 
